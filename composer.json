@@ -1,0 +1,20 @@
+{
+    "name": "veka-server/minifier",
+    "description": "Un middleware pour minifier les fichier css et js d'un dossier via une url /css et /js",
+    "license": "MIT",
+    "keywords": ["middleware","minimalist","PSR-15","minifier", "css", "js"],
+    "authors": [
+        {
+            "name": "Vanhaezebrouck Nicolas",
+            "email": "contact@veka-server.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "VekaServer\\Minifier\\" : "src/"
+        }
+    },
+    "require": {
+        "psr/http-message": "^1.0"
+    }
+}
