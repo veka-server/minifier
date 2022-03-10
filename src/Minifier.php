@@ -14,36 +14,44 @@ class Minifier implements MiddlewareInterface
     private $js_directory ;
     private $cacheTime ;
 
-    public function __construct(String $css_directory, String $js_directory, int $cacheTime = 0) {
-        $this->css_directory = $css_directory ;
-        $this->js_directory = $js_directory ;
+    public function __construct(String|array $css_directory, String|array $js_directory, int $cacheTime = 0) {
+        $this->css_directory = is_array($css_directory) ? $css_directory : [$css_directory] ;
+        $this->js_directory = is_array($js_directory) ? $js_directory : [$js_directory] ;
         $this->cacheTime = $cacheTime ;
     }
 
     public function getCss(){
-        $path = realpath($this->css_directory);
-        $fileList = glob($path.'/*');
+
         header('Content-type: text/css');
         if($this->cacheTime > 0 )
             header('Cache-Control: max-age='.$this->cacheTime);
-        $str = '';
-        foreach($fileList as $filename){
-            $str .= file_get_contents($filename);
+
+        foreach ($this->css_directory as $path){
+            $path = realpath($path);
+            $fileList = glob($path.'/*');
+            $str = '';
+            foreach($fileList as $filename){
+                $str .= file_get_contents($filename).PHP_EOL.PHP_EOL;
+            }
+            echo $str;
         }
-        echo $str;
     }
 
     public function getJs(){
-        $path = realpath($this->js_directory);
-        $fileList = glob($path.'/*');
+
         header('Content-type: text/plain');
         if($this->cacheTime > 0 )
             header('Cache-Control: max-age='.$this->cacheTime);
-        $str = '';
-        foreach($fileList as $filename){
-            $str .= file_get_contents($filename);
+
+        foreach ($this->js_directory as $path){
+            $path = realpath($path);
+            $fileList = glob($path.'/*');
+            $str = '';
+            foreach($fileList as $filename){
+                $str .= file_get_contents($filename).PHP_EOL.PHP_EOL;
+            }
+            echo $str;
         }
-        echo $str;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
