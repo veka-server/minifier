@@ -27,8 +27,11 @@ class Minifier implements MiddlewareInterface
             header('Cache-Control: max-age='.$this->cacheTime);
 
         foreach ($this->css_directory as $path){
+            if(empty($path)){
+                continue;
+            }
             $path = realpath($path);
-            $fileList = glob($path.'/*');
+            $fileList = glob($path.'/*.css');
             $str = '';
             foreach($fileList as $filename){
                 $str .= file_get_contents($filename).PHP_EOL.PHP_EOL;
@@ -44,8 +47,11 @@ class Minifier implements MiddlewareInterface
             header('Cache-Control: max-age='.$this->cacheTime);
 
         foreach ($this->js_directory as $path){
+            if(empty($path)){
+                continue;
+            }
             $path = realpath($path);
-            $fileList = glob($path.'/*');
+            $fileList = glob($path.'/*.js');
             $str = '';
             foreach($fileList as $filename){
                 $str .= file_get_contents($filename).PHP_EOL.PHP_EOL;
