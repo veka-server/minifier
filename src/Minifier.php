@@ -22,10 +22,12 @@ class Minifier implements MiddlewareInterface
 
     public function getCss(){
 
-        header('Content-type: text/css');
-        if($this->cacheTime > 0 )
+        if($this->cacheTime > 0 ){
+            header('Pragma: cache');
             header('Cache-Control: max-age='.$this->cacheTime);
-
+        }
+        
+        header('Content-type: text/css');
         foreach ($this->css_directory as $path){
             if(empty($path)){
                 continue;
@@ -36,16 +38,23 @@ class Minifier implements MiddlewareInterface
             foreach($fileList as $filename){
                 $str .= file_get_contents($filename).PHP_EOL.PHP_EOL;
             }
+            
+            if(isset($_GET['version']) && !empty($_GET['version'])){
+                $str=str_replace('--version--', $_GET['version'], $str);
+            }
+            
             echo $str;
         }
     }
 
     public function getJs(){
 
-        header('Content-type: text/plain');
-        if($this->cacheTime > 0 )
+        if($this->cacheTime > 0 ){
+            header('Pragma: cache');
             header('Cache-Control: max-age='.$this->cacheTime);
-
+        }
+        
+        header('Content-type: text/plain');
         foreach ($this->js_directory as $path){
             if(empty($path)){
                 continue;
